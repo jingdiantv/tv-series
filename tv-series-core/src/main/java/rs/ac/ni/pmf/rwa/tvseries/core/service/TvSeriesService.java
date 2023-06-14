@@ -1,12 +1,12 @@
-package rs.ac.ni.pmf.rwa.tvseries.core;
+package rs.ac.ni.pmf.rwa.tvseries.core.service;
 
 import lombok.RequiredArgsConstructor;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
+import rs.ac.ni.pmf.rwa.tvseries.core.provider.TvSeriesProvider;
 import rs.ac.ni.pmf.rwa.tvseries.exception.DuplicateIdException;
 import rs.ac.ni.pmf.rwa.tvseries.exception.UnknownTvSeriesException;
 
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 public class TvSeriesService {
@@ -43,7 +43,7 @@ public class TvSeriesService {
     public void update(final TvSeries tvSeries, final Integer id){
         final Integer newId = tvSeries.getId();
         if(!id.equals(newId)){
-            throw new IllegalArgumentException("Id of tv series cannot bew changed");
+            throw new IllegalArgumentException("Id of tv series cannot be changed");
         }
         if(tvSeriesProvider.getTvSeriesById(id).isEmpty()){
             throw new UnknownTvSeriesException(id);

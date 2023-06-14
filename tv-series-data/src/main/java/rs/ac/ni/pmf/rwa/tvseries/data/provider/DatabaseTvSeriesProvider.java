@@ -1,7 +1,7 @@
-package rs.ac.ni.pmf.rwa.tvseries.data;
+package rs.ac.ni.pmf.rwa.tvseries.data.provider;
 
 import lombok.RequiredArgsConstructor;
-import rs.ac.ni.pmf.rwa.tvseries.core.TvSeriesProvider;
+import rs.ac.ni.pmf.rwa.tvseries.core.provider.TvSeriesProvider;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
 import rs.ac.ni.pmf.rwa.tvseries.data.dao.TvSeriesDao;
 import rs.ac.ni.pmf.rwa.tvseries.data.entity.TvSeriesEntity;

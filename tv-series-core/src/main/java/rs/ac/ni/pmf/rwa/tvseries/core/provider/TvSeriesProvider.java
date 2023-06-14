@@ -1,4 +1,4 @@
-package rs.ac.ni.pmf.rwa.tvseries.core;
+package rs.ac.ni.pmf.rwa.tvseries.core.provider;
 
 import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
 

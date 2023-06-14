@@ -1,4 +1,4 @@
-package rs.ac.ni.pmf.rwa.tvseries.rest;
+package rs.ac.ni.pmf.rwa.tvseries.rest.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
