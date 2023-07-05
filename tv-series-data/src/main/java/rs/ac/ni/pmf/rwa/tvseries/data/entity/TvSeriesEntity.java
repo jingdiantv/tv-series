@@ -2,8 +2,10 @@ package rs.ac.ni.pmf.rwa.tvseries.data.entity;
 
 
 import lombok.*;
+import rs.ac.ni.pmf.rwa.tvseries.core.model.User;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,5 +22,9 @@ public class TvSeriesEntity {
     String name;
 
     Integer numberOfEpisodes;
+    @OneToMany(mappedBy = "tvSeries",cascade = CascadeType.ALL, orphanRemoval = true)
+    List<WatchListEntity> usersWatched;
+
+
 
 }

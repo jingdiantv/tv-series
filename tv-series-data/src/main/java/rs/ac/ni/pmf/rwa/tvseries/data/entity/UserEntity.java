@@ -1,10 +1,10 @@
 package rs.ac.ni.pmf.rwa.tvseries.data.entity;
 
 import lombok.*;
+import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,4 +17,10 @@ public class UserEntity {
     @Id
     String username;
     String password;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    List<WatchListEntity> watchedTvSeries;
+
+
+
 }

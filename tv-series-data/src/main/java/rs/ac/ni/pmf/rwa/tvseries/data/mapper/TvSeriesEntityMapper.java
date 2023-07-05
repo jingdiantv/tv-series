@@ -14,6 +14,16 @@ public class TvSeriesEntityMapper {
                 .build();
     }
 
+    public static TvSeries fromEntityWithRating(final TvSeriesEntity entity,Double rating)
+    {
+        return TvSeries.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .numberOfEpisodes(entity.getNumberOfEpisodes())
+                .rating(rating)
+                .build();
+    }
+
     public static TvSeriesEntity toEntity(final TvSeries tvSeries)
     {
         return TvSeriesEntity.builder()

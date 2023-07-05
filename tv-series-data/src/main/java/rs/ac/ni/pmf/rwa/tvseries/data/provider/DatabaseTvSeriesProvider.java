@@ -5,6 +5,7 @@ import rs.ac.ni.pmf.rwa.tvseries.core.provider.TvSeriesProvider;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
 import rs.ac.ni.pmf.rwa.tvseries.data.dao.TvSeriesDao;
 import rs.ac.ni.pmf.rwa.tvseries.data.entity.TvSeriesEntity;
+import rs.ac.ni.pmf.rwa.tvseries.data.entity.WatchListEntity;
 import rs.ac.ni.pmf.rwa.tvseries.data.mapper.TvSeriesEntityMapper;
 
 import java.util.List;
@@ -24,16 +25,31 @@ public class DatabaseTvSeriesProvider implements TvSeriesProvider {
         }
         TvSeriesEntity tvSeriesEntity=optionalTvSeriesEntity.get();
 
+       Double averageRating= tvSeriesEntity.getUsersWatched().stream()
+                .mapToInt( WatchListEntity::getRating)
+                .average()
+               .orElse(0.0d);
 
 
-        return Optional.ofNullable(TvSeriesEntityMapper.fromEntity(tvSeriesEntity));
+
+
+
+        return Optional.ofNullable(TvSeriesEntityMapper.fromEntityWithRating(tvSeriesEntity,averageRating));
     }
 
     @Override
     public List<TvSeries> getAllTvSeries() {
 
         return tvSeriesDao.findAll().stream()
-                .map(TvSeriesEntityMapper::fromEntity)
+                .map((entity)->{
+                            Double averageRating= entity.getUsersWatched().stream()
+                                    .mapToInt( WatchListEntity::getRating)
+                                    .average()
+                                    .orElse(0.0d);
+                            return TvSeriesEntityMapper.fromEntityWithRating(entity,averageRating);
+                        }
+
+                       )
                 .collect(Collectors.toList());
 
     }

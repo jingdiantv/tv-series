@@ -3,10 +3,8 @@ package rs.ac.ni.pmf.rwa.tvseries.rest.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.User;
 import rs.ac.ni.pmf.rwa.tvseries.core.service.UserService;
-import rs.ac.ni.pmf.rwa.tvseries.rest.dto.TvSeriesDTO;
 import rs.ac.ni.pmf.rwa.tvseries.rest.dto.UserDTO;
 import rs.ac.ni.pmf.rwa.tvseries.rest.mapper.UserMapper;
 
@@ -15,7 +13,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class UserRestController {
 
     private final UserService userService;
 

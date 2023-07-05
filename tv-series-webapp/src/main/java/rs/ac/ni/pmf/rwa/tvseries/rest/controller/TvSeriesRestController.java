@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.ni.pmf.rwa.tvseries.core.service.TvSeriesService;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
-import rs.ac.ni.pmf.rwa.tvseries.rest.dto.TvSeriesDTO;
+import rs.ac.ni.pmf.rwa.tvseries.rest.dto.tvseries.TvSeriesDTO;
+import rs.ac.ni.pmf.rwa.tvseries.rest.dto.tvseries.TvSeriesSimpleDTO;
 import rs.ac.ni.pmf.rwa.tvseries.rest.mapper.TvSeriesMapper;
 
 import java.util.List;
@@ -34,17 +35,17 @@ public class TvSeriesRestController {
 
     @PostMapping("/tv-series")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createTvSeries(@RequestBody final TvSeriesDTO tvSeriesDTO)
+    public void createTvSeries(@RequestBody final TvSeriesSimpleDTO tvSeriesDTO)
     {
 
-        tvSeriesService.createTvSeries(tvSeriesMapper.fromDto(tvSeriesDTO));
+        tvSeriesService.createTvSeries(tvSeriesMapper.fromDtoSimple(tvSeriesDTO));
     }
 
     @PutMapping("/tv-series/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void updateTvSeries(@RequestBody final TvSeriesDTO tvSeriesDTO,@PathVariable(value = "id") Integer id)
+    public void updateTvSeries(@RequestBody final TvSeriesSimpleDTO tvSeriesDTO,@PathVariable(value = "id") Integer id)
     {
-        tvSeriesService.update(tvSeriesMapper.fromDto(tvSeriesDTO), id);
+        tvSeriesService.update(tvSeriesMapper.fromDtoSimple(tvSeriesDTO), id);
     }
     @DeleteMapping("/tv-series/{id}")
     public void deleteTvSeries(@PathVariable(value = "id") Integer id)
