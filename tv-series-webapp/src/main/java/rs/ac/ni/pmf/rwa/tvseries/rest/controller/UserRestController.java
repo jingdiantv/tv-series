@@ -29,7 +29,7 @@ public class UserRestController {
     @GetMapping("/users/{username}")
     public UserDTO getUserByUsername(@PathVariable(name = "username") final String username)
     {
-        final User user = userService.getUSerByUsername(username);
+        final User user = userService.getUserByUsername(username);
         return userMapper.toDto(user);
     }
 

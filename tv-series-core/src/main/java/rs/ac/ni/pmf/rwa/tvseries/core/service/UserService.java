@@ -1,12 +1,9 @@
 package rs.ac.ni.pmf.rwa.tvseries.core.service;
 
 import lombok.RequiredArgsConstructor;
-import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.User;
 import rs.ac.ni.pmf.rwa.tvseries.core.provider.UserProvider;
-import rs.ac.ni.pmf.rwa.tvseries.exception.DuplicateIdException;
 import rs.ac.ni.pmf.rwa.tvseries.exception.DuplicateUserException;
-import rs.ac.ni.pmf.rwa.tvseries.exception.UnknownTvSeriesException;
 import rs.ac.ni.pmf.rwa.tvseries.exception.UnknownUserException;
 
 import java.util.List;
@@ -16,7 +13,7 @@ public class UserService {
 
     private final UserProvider userProvider;
 
-    public User getUSerByUsername(String username){
+    public User getUserByUsername(String username){
         return userProvider.getUserByUsername(username).orElseThrow( () -> new UnknownUserException(username));
     }
 
