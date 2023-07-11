@@ -16,5 +16,5 @@ public interface UserProvider {
 
     void removeUser(final String username);
 
-    void updateUser(User user);
+    void updateUser(User user,String username);
 }

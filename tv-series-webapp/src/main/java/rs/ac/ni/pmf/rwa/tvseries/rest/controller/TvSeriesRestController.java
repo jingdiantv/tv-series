@@ -9,6 +9,9 @@ import rs.ac.ni.pmf.rwa.tvseries.rest.dto.tvseries.TvSeriesDTO;
 import rs.ac.ni.pmf.rwa.tvseries.rest.dto.tvseries.TvSeriesSimpleDTO;
 import rs.ac.ni.pmf.rwa.tvseries.rest.mapper.TvSeriesMapper;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,5 +56,43 @@ public class TvSeriesRestController {
         tvSeriesService.delete(id);
     }
 
+
+
+    @PostMapping("/tv-series/create-from-file")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createTvSeriesFromFile()
+    {
+        // code for scraping Tv Series
+        //File downloaded from https://github.com/WittmannF/imdb-tv-ratings/blob/master/data/top-seasons-full.csv
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Dusan\\Desktop\\Master\\Web\\tvSeries.csv"));
+            String mystring;
+
+            while ((mystring = reader.readLine()) != null)
+            {
+                String[] tvSeriesValues = mystring.split(",");
+                String name=tvSeriesValues[0];
+                Integer season=Integer.parseInt(tvSeriesValues[1]);
+                Integer numberOfEpisodes=Integer.parseInt(tvSeriesValues[2]);
+
+                if(season!=1){
+                    name+=" Season "+season;
+                }
+                TvSeries tvSeries=TvSeries.builder()
+                        .name(name)
+                        .numberOfEpisodes(numberOfEpisodes)
+                        .build();
+
+                tvSeriesService.createTvSeries(tvSeries);
+
+
+            }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
 
 }

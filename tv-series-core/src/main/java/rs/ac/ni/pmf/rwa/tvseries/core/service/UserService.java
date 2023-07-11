@@ -57,10 +57,10 @@ public class UserService {
                 throw new DuplicateUserException(newUsername);
             }
 
-            userProvider.removeUser(username);
+            //userProvider.removeUser(username);
         }
         log.info("Updating  User with username[{}]",username);
-        userProvider.updateUser(user);
+        userProvider.updateUser(user,username);
 
     }
     public void delete(final String username){

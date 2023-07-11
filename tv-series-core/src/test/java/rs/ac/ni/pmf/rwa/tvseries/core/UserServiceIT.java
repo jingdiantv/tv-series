@@ -104,7 +104,7 @@ public class UserServiceIT {
         when(userProvider.getUserByUsername(username)).thenReturn(Optional.of(user));
 
         userService.update(user,username);
-        verify(userProvider).updateUser(user);
+        verify(userProvider).updateUser(user,username);
 
         /*Should remove user if different username is passed*/
 
@@ -115,8 +115,7 @@ public class UserServiceIT {
 
         when(userProvider.getUserByUsername("anotherUsername")).thenReturn(Optional.empty());
         userService.update(user2,username2);
-        verify(userProvider).updateUser(user2);
-        verify(userProvider).removeUser(username2);
+        verify(userProvider).updateUser(user2,username2);
 
 
     }

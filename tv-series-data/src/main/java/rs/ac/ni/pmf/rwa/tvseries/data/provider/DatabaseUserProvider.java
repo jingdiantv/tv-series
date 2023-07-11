@@ -11,6 +11,7 @@ import rs.ac.ni.pmf.rwa.tvseries.data.entity.TvSeriesEntity;
 import rs.ac.ni.pmf.rwa.tvseries.data.entity.UserEntity;
 import rs.ac.ni.pmf.rwa.tvseries.data.mapper.TvSeriesEntityMapper;
 import rs.ac.ni.pmf.rwa.tvseries.data.mapper.UserEntityMapper;
+import rs.ac.ni.pmf.rwa.tvseries.exception.UnknownUserException;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,8 +61,11 @@ public class DatabaseUserProvider implements UserProvider {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(User user,String username) {
+        UserEntity existing=userDao.findById(username).orElseThrow(()->new UnknownUserException(username));
+        existing.setUsername(user.getUsername());
+        existing.setPassword(user.getPassword());
         log.info("Updated User");
-        userDao.save(UserEntityMapper.toEntity(user));
+        userDao.save(existing);
     }
 }
