@@ -1,6 +1,7 @@
 package rs.ac.ni.pmf.rwa.tvseries.data.provider;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.User;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.WatchedTvSeries;
@@ -19,12 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@Slf4j
 @RequiredArgsConstructor
 public class DatabaseWatchListProvider  implements WatchListProvider {
 
     final UserDao userDao;
     final TvSeriesDao tvSeriesDao;
+
 
 
 
@@ -46,6 +48,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
                         .episodesWatched(episodesWatched)
                         .build()
         );
+        log.info("Tv Series with id[{}] is added to users[{}] watch list ",tvSeriesId,username);
         userDao.save(user);
     }
 
@@ -65,7 +68,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
                                             .episodesWatched(watchListEntity.getEpisodesWatched())
                                     .build());
                         });
-
+        log.info("Returned list of all Tv Series watched by user[{}] ",username);
         return list;
 
     }
@@ -73,7 +76,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
     @Override
     public Double getAverageRating(Integer tvSeriesId) {
       TvSeriesEntity tvSeries= tvSeriesDao.findById(tvSeriesId).orElseThrow(()-> new UnknownTvSeriesException(tvSeriesId));
-
+        log.info("Returned average rating of Tv Series with id[{}]  ",tvSeriesId);
       return tvSeries.getUsersWatched().stream()
               .mapToInt( WatchListEntity::getRating)
               .average().orElse(0.0d);
@@ -89,6 +92,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
 
         for(WatchListEntity entity: user.getWatchedTvSeries()){
             if (entity.getTvSeries().getId().equals(tvSeriesId)){
+                log.info("Returned Tv Series with id[{}] from users[{}] watch list  ",tvSeriesId,username);
                 return Optional.of(TvSeries.builder()
                         .id(entity.getTvSeries().getId())
                         .name(entity.getTvSeries().getName())
@@ -99,7 +103,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
             }
         }
 
-
+        log.info("Tv Series with id[{}] is not founded on users[{}] watch list  ",tvSeriesId,username);
         return Optional.empty();
     }
 
@@ -118,6 +122,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
             }
 
         }
+        log.info("Entry of Tv Series with id[{}] is updated on Users[{}] watchlist  ",tvSeriesId,username);
         userDao.save(user);
 
     }
@@ -128,6 +133,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
 
         user.getWatchedTvSeries().removeIf(watchList -> watchList.getTvSeries().getId().equals(tvSeriesId));
 
+        log.info("Removed Tv Series with id[{}] from users[{}] watch list  ",tvSeriesId,username);
         userDao.save(user);
     }
 }

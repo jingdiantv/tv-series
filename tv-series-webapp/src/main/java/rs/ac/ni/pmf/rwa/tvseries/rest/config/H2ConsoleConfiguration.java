@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class H2ConsoleConfiguration {
 
-    @Bean
+    /*@Bean
     ServletRegistrationBean<WebServlet> h2ServletRegistration(){
         ServletRegistrationBean<WebServlet> registrationBean=new ServletRegistrationBean<WebServlet>(new WebServlet());
         registrationBean.addUrlMappings("/h2/*");
         return registrationBean;
-    }
+    }*/
 }

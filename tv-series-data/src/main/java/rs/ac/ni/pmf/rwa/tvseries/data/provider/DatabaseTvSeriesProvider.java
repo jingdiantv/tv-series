@@ -1,6 +1,7 @@
 package rs.ac.ni.pmf.rwa.tvseries.data.provider;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import rs.ac.ni.pmf.rwa.tvseries.core.provider.TvSeriesProvider;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
 import rs.ac.ni.pmf.rwa.tvseries.data.dao.TvSeriesDao;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 public class DatabaseTvSeriesProvider implements TvSeriesProvider {
 
@@ -21,6 +23,7 @@ public class DatabaseTvSeriesProvider implements TvSeriesProvider {
         Optional<TvSeriesEntity> optionalTvSeriesEntity=tvSeriesDao.findById(id);
 
         if(optionalTvSeriesEntity.isEmpty()){
+            log.info("Tv Series with id[{}] is not founded",id);
             return Optional.empty();
         }
         TvSeriesEntity tvSeriesEntity=optionalTvSeriesEntity.get();
@@ -30,16 +33,15 @@ public class DatabaseTvSeriesProvider implements TvSeriesProvider {
                 .average()
                .orElse(0.0d);
 
-
-
-
-
+       log.info("Returned Tv Series with id [{}]",id);
         return Optional.ofNullable(TvSeriesEntityMapper.fromEntityWithRating(tvSeriesEntity,averageRating));
+
+
     }
 
     @Override
     public List<TvSeries> getAllTvSeries() {
-
+        log.info("Returned list of all Tv Series");
         return tvSeriesDao.findAll().stream()
                 .map((entity)->{
                             Double averageRating= entity.getUsersWatched().stream()
@@ -56,16 +58,22 @@ public class DatabaseTvSeriesProvider implements TvSeriesProvider {
 
     @Override
     public void saveTvSeries(TvSeries tvSeries) {
+
+        log.info("Saved Tv Series");
         tvSeriesDao.save(TvSeriesEntityMapper.toEntity(tvSeries));
     }
 
     @Override
     public void removeTvSeries(Integer id) {
+
+        log.info("Deleted Tv Series with id[{}]",id);
         tvSeriesDao.deleteById(id);
     }
 
     @Override
     public void updateTvSeries(TvSeries tvSeries) {
-        tvSeriesDao.save(TvSeriesEntityMapper.toEntity(tvSeries));
+        log.info("Updated Tv Series");
+        tvSeriesDao.save(TvSeriesEntityMapper.toEntity(tvSeries)
+        );
     }
 }
