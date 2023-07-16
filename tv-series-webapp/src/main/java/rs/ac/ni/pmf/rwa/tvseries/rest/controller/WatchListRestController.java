@@ -1,7 +1,9 @@
 package rs.ac.ni.pmf.rwa.tvseries.rest.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.ni.pmf.rwa.tvseries.core.service.WatchListService;
 import rs.ac.ni.pmf.rwa.tvseries.rest.dto.UserDTO;
@@ -15,6 +17,7 @@ import rs.ac.ni.pmf.rwa.tvseries.rest.mapper.WatchedTvSeriesMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SecurityRequirement(name = "default")
 @RestController
 @RequiredArgsConstructor
 public class WatchListRestController {
@@ -24,10 +27,11 @@ public class WatchListRestController {
 
     private  final WatchedTvSeriesMapper watchedTvSeriesMapper;
 
-    @PostMapping("/{user}/watch-list/")
+    @PreAuthorize("#username == authentication.name")
+    @PostMapping("/{username}/watch-list")
     @ResponseStatus(HttpStatus.CREATED)
     public void addToWatchList(
-            @PathVariable(name = "user")  String username,
+            @PathVariable(name = "username")  String username,
             @RequestBody final WatchedTvSeriesDTO watchedTvSeriesDTO
             )
     {
@@ -35,41 +39,46 @@ public class WatchListRestController {
         watchListService.addToWatchList(username,watchedTvSeriesMapper.fromDto(watchedTvSeriesDTO));
     }
 
-    @GetMapping("/{user}/watch-list")
+    @PreAuthorize("#username == authentication.name || authentication.authorities.contains('Admin')")
+    @GetMapping("/{username}/watch-list")
     @ResponseStatus(HttpStatus.OK)
     public List<TvSeriesWithEpisodesWatchedDTO> getWatchList(
-            @PathVariable(name = "user")  String username
+            @PathVariable(name = "username")  String username
     )
     {
         return watchListService.getTvSeriesByUsername(username).stream().map(tvSeriesMapper::toDtoWithEpisodesWatched ).collect(Collectors.toList());
     }
 
 
-    @GetMapping("/{user}/watch-list/{tvSeries}")
+    @PreAuthorize("#username == authentication.name || authentication.authorities.contains('Admin')")
+    @GetMapping("/{username}/watch-list/{tvSeriesId}")
     @ResponseStatus(HttpStatus.OK)
     public TvSeriesWithEpisodesWatchedDTO getTvSeriesOnWatchList(
-            @PathVariable(name = "user")  String username,
-             @PathVariable(name = "tvSeries")  Integer tvSeriesId
+            @PathVariable(name = "username")  String username,
+             @PathVariable(name = "tvSeriesId")  Integer tvSeriesId
     )
     {
         return tvSeriesMapper.toDtoWithEpisodesWatched(watchListService.getTvSeriesOnWatchListById(username,tvSeriesId)) ;
     }
 
-    @PutMapping("/{user}/watch-list/{tvSeries}")
+    @PreAuthorize("#username == authentication.name || authentication.authorities.contains('Admin')")
+    @PutMapping("/{username}/watch-list/{tvSeriesId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void updateWatchList(@RequestBody final WatchedTvSeriesDTO watchedTvSeriesDTO,
-                           @PathVariable(name = "user")  String username,
-                           @PathVariable(name = "tvSeries")  Integer tvSeriesId
+                           @PathVariable(name = "username")  String username,
+                           @PathVariable(name = "tvSeriesId")  Integer tvSeriesId
     )
     {
         watchListService.update(watchedTvSeriesMapper.fromDto(watchedTvSeriesDTO), username,tvSeriesId);
     }
 
 
-    @DeleteMapping("/{user}/watch-list/{tvSeries}")
+    @PreAuthorize("#username == authentication.name || authentication.authorities.contains('Admin')")
+    @DeleteMapping("/{username}/watch-list/{tvSeriesId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteWatchList(
-            @PathVariable(name = "user")  String username,
-            @PathVariable(name = "tvSeries")  Integer tvSeriesId
+            @PathVariable(name = "username")  String username,
+            @PathVariable(name = "tvSeriesId")  Integer tvSeriesId
     )
     {
         watchListService.delete(username,tvSeriesId);

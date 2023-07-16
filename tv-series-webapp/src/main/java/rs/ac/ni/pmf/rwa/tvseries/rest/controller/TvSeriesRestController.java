@@ -1,5 +1,7 @@
 package rs.ac.ni.pmf.rwa.tvseries.rest.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.io.FileReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SecurityRequirement(name = "default")
 @RestController
 @RequiredArgsConstructor
 public class TvSeriesRestController {
@@ -51,6 +54,7 @@ public class TvSeriesRestController {
         tvSeriesService.update(tvSeriesMapper.fromDtoSimple(tvSeriesDTO), id);
     }
     @DeleteMapping("/tv-series/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTvSeries(@PathVariable(value = "id") Integer id)
     {
         tvSeriesService.delete(id);
@@ -58,41 +62,41 @@ public class TvSeriesRestController {
 
 
 
-    @PostMapping("/tv-series/create-from-file")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createTvSeriesFromFile()
-    {
-        // code for scraping Tv Series
-        //File downloaded from https://github.com/WittmannF/imdb-tv-ratings/blob/master/data/top-seasons-full.csv
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Dusan\\Desktop\\Master\\Web\\tvSeries.csv"));
-            String mystring;
-
-            while ((mystring = reader.readLine()) != null)
-            {
-                String[] tvSeriesValues = mystring.split(",");
-                String name=tvSeriesValues[0];
-                Integer season=Integer.parseInt(tvSeriesValues[1]);
-                Integer numberOfEpisodes=Integer.parseInt(tvSeriesValues[2]);
-
-                if(season!=1){
-                    name+=" Season "+season;
-                }
-                TvSeries tvSeries=TvSeries.builder()
-                        .name(name)
-                        .numberOfEpisodes(numberOfEpisodes)
-                        .build();
-
-                tvSeriesService.createTvSeries(tvSeries);
-
-
-            }
-
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
+//    @PostMapping("/tv-series/create-from-file")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public void createTvSeriesFromFile()
+//    {
+//        // code for scraping Tv Series
+//        //File downloaded from https://github.com/WittmannF/imdb-tv-ratings/blob/master/data/top-seasons-full.csv
+//        try {
+//            BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Dusan\\Desktop\\Master\\Web\\tvSeries.csv"));
+//            String mystring;
+//
+//            while ((mystring = reader.readLine()) != null)
+//            {
+//                String[] tvSeriesValues = mystring.split(",");
+//                String name=tvSeriesValues[0];
+//                Integer season=Integer.parseInt(tvSeriesValues[1]);
+//                Integer numberOfEpisodes=Integer.parseInt(tvSeriesValues[2]);
+//
+//                if(season!=1){
+//                    name+=" Season "+season;
+//                }
+//                TvSeries tvSeries=TvSeries.builder()
+//                        .name(name)
+//                        .numberOfEpisodes(numberOfEpisodes)
+//                        .build();
+//
+//                tvSeriesService.createTvSeries(tvSeries);
+//
+//
+//            }
+//
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//
+//    }
 
 }

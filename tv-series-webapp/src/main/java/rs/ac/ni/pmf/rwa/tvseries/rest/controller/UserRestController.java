@@ -1,7 +1,9 @@
 package rs.ac.ni.pmf.rwa.tvseries.rest.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.User;
 import rs.ac.ni.pmf.rwa.tvseries.core.service.UserService;
@@ -11,6 +13,7 @@ import rs.ac.ni.pmf.rwa.tvseries.rest.mapper.UserMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SecurityRequirement(name = "default")
 @RestController
 @RequiredArgsConstructor
 public class UserRestController {
@@ -26,6 +29,7 @@ public class UserRestController {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("#username == authentication.name || hasAuthority('ADMIN')")
     @GetMapping("/users/{username}")
     public UserDTO getUserByUsername(@PathVariable(name = "username") final String username)
     {
@@ -40,14 +44,16 @@ public class UserRestController {
 
         userService.createUser(userMapper.fromDto(userDTO));
     }
-
+    @PreAuthorize("#username == authentication.name || authentication.authorities.contains('Admin')")
     @PutMapping("/users/{username}")
     @ResponseStatus(HttpStatus.CREATED)
     public void updateUser(@RequestBody final UserDTO userDTO,@PathVariable(value = "username") String username)
     {
         userService.update(userMapper.fromDto(userDTO), username);
     }
+    @PreAuthorize("#username == authentication.name || authentication.authorities.contains('Admin')")
     @DeleteMapping("/users/{username}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable(value = "username") String username)
     {
         userService.delete(username);
