@@ -53,7 +53,7 @@ public class TvSeriesServiceIT {
         when(tvSeriesProvider.getAllTvSeries())
                 .thenReturn(expectedTvSeries);
 
-        final List<TvSeries> actualTvSeries = tvSeriesService.getAllTvSeries();
+        final List<TvSeries> actualTvSeries = tvSeriesService.getAllTvSeries(pageNumber);
 
         assertThat(actualTvSeries).isEqualTo(expectedTvSeries);
 

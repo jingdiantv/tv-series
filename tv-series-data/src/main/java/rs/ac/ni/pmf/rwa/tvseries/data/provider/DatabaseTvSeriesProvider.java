@@ -2,6 +2,8 @@ package rs.ac.ni.pmf.rwa.tvseries.data.provider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import rs.ac.ni.pmf.rwa.tvseries.core.provider.TvSeriesProvider;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
 import rs.ac.ni.pmf.rwa.tvseries.data.dao.TvSeriesDao;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DatabaseTvSeriesProvider implements TvSeriesProvider {
 
+    private final Integer pageSize=10;
     private final TvSeriesDao tvSeriesDao;
     @Override
     public Optional<TvSeries> getTvSeriesById(Integer id) {
@@ -40,9 +43,11 @@ public class DatabaseTvSeriesProvider implements TvSeriesProvider {
     }
 
     @Override
-    public List<TvSeries> getAllTvSeries() {
+    public List<TvSeries> getAllTvSeries(String searchKey, int pageNumber) {
         log.info("Returned list of all Tv Series");
-        return tvSeriesDao.findAll().stream()
+
+        Pageable pageable= PageRequest.of(pageNumber,pageSize);
+        return tvSeriesDao.findByNameContainingIgnoreCase(searchKey,pageable).stream()
                 .map((entity)->{
                             Double averageRating= entity.getUsersWatched().stream()
                                     .mapToInt( WatchListEntity::getRating)

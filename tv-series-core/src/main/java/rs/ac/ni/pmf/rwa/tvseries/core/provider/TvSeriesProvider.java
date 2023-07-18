@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface TvSeriesProvider {
     Optional<TvSeries> getTvSeriesById(final Integer id);
 
-    List<TvSeries> getAllTvSeries();
+    List<TvSeries> getAllTvSeries(String searchKey,int pageNumber);
 
     void saveTvSeries(final TvSeries tvSeries);
 

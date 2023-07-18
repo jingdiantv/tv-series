@@ -7,6 +7,7 @@ import rs.ac.ni.pmf.rwa.tvseries.core.provider.TvSeriesProvider;
 import rs.ac.ni.pmf.rwa.tvseries.exception.DuplicateIdException;
 import rs.ac.ni.pmf.rwa.tvseries.exception.UnknownTvSeriesException;
 
+
 import java.util.List;
 
 @Slf4j
@@ -19,11 +20,11 @@ public class TvSeriesService {
         return tvSeriesProvider.getTvSeriesById(id).orElseThrow( () -> new UnknownTvSeriesException(id));
     }
 
-    public List<TvSeries> getAllTvSeries()
+    public List<TvSeries> getAllTvSeries(String searchKey, int pageNumber)
     {
 
         log.info("Getting all TvSeries.");
-        return tvSeriesProvider.getAllTvSeries();
+        return tvSeriesProvider.getAllTvSeries(searchKey,pageNumber);
     }
 
     public void createTvSeries(final TvSeries tvSeries)

@@ -25,9 +25,12 @@ public class TvSeriesRestController {
 
     private final TvSeriesMapper tvSeriesMapper;
     @GetMapping("/tv-series")
-    public List<TvSeriesDTO> getAllTvSeries()
+    public List<TvSeriesDTO> getAllTvSeries(
+            @RequestParam(defaultValue = "0") int pageNumber,
+             @RequestParam(defaultValue = "") String searchKey
+    )
     {
-        return tvSeriesService.getAllTvSeries().stream()
+        return tvSeriesService.getAllTvSeries(searchKey,pageNumber).stream()
                 .map(tvSeriesMapper::toDto)
                 .collect(Collectors.toList());
     }
