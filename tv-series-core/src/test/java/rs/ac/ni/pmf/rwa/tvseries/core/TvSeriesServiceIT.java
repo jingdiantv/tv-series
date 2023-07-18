@@ -49,11 +49,13 @@ public class TvSeriesServiceIT {
 
     @Test
     public void shouldGetAllTvSeries( ){
+        int pageNumber=0;
+        String searchKey="";
         final List<TvSeries> expectedTvSeries = mock(List.class);
-        when(tvSeriesProvider.getAllTvSeries())
+        when(tvSeriesProvider.getAllTvSeries(searchKey,pageNumber))
                 .thenReturn(expectedTvSeries);
 
-        final List<TvSeries> actualTvSeries = tvSeriesService.getAllTvSeries(pageNumber);
+        final List<TvSeries> actualTvSeries = tvSeriesService.getAllTvSeries(searchKey,pageNumber);
 
         assertThat(actualTvSeries).isEqualTo(expectedTvSeries);
 
