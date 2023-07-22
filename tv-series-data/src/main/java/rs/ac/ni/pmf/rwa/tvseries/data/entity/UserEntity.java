@@ -12,9 +12,14 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Table(name = "users")
-/* ukoliko tabelu nazovemo user dodje do greske jer je user kljucna rec u h2 bazi*/
+
 public class UserEntity {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Integer id;
+
+    @Column(unique=true)
     String username;
     String password;
 

@@ -37,7 +37,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
         Integer rating= watchedTvSeries.getRating();
         Integer episodesWatched=watchedTvSeries.getEpisodesWatched();
 
-        UserEntity user= userDao.findById(username).orElseThrow(()-> new UnknownUserException(username));
+        UserEntity user= userDao.findByUsername(username).orElseThrow(()-> new UnknownUserException(username));
         TvSeriesEntity tvSeries= tvSeriesDao.findById(tvSeriesId).orElseThrow(()->new UnknownTvSeriesException(tvSeriesId));
         user.getWatchedTvSeries().add(
                 WatchListEntity.
@@ -54,7 +54,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
 
     @Override
     public List<TvSeries>  getTvSeriesByUsername(String username){
-        UserEntity user= userDao.findById(username).orElseThrow(()-> new UnknownUserException(username));
+        UserEntity user= userDao.findByUsername(username).orElseThrow(()-> new UnknownUserException(username));
 
         List<TvSeries> list = new ArrayList<TvSeries>() ;
         user.getWatchedTvSeries()
@@ -87,7 +87,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
     @Override
     public Optional<TvSeries> getTvSeriesOnWatchListById(String username, Integer tvSeriesId) {
 
-        UserEntity user= userDao.findById(username).orElseThrow(()-> new UnknownUserException(username));
+        UserEntity user= userDao.findByUsername(username).orElseThrow(()-> new UnknownUserException(username));
 
 
         for(WatchListEntity entity: user.getWatchedTvSeries()){
@@ -114,7 +114,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
         Integer rating= watchedTvSeries.getRating();
         Integer episodesWatched=watchedTvSeries.getEpisodesWatched();
 
-        UserEntity user= userDao.findById(username).orElseThrow(()-> new UnknownUserException(username));
+        UserEntity user= userDao.findByUsername(username).orElseThrow(()-> new UnknownUserException(username));
         for (WatchListEntity watchList :user.getWatchedTvSeries()){
             if(watchList.getTvSeries().getId().equals(tvSeriesId)){
                 watchList.setRating(rating);
@@ -129,7 +129,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
 
     @Override
     public void delete(String username, Integer tvSeriesId) {
-        UserEntity user= userDao.findById(username).orElseThrow(()-> new UnknownUserException(username));
+        UserEntity user= userDao.findByUsername(username).orElseThrow(()-> new UnknownUserException(username));
 
         user.getWatchedTvSeries().removeIf(watchList -> watchList.getTvSeries().getId().equals(tvSeriesId));
 

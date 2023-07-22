@@ -25,7 +25,7 @@ public class DatabaseUserProvider implements UserProvider {
 
     @Override
     public Optional<User> getUserByUsername(String username) {
-        Optional<UserEntity> optionalUserEntity=userDao.findById(username);
+        Optional<UserEntity> optionalUserEntity=userDao.findByUsername(username);
 
         if(optionalUserEntity.isEmpty()){
             log.info("User with username[{}] is not founded",username);
@@ -57,12 +57,12 @@ public class DatabaseUserProvider implements UserProvider {
     public void removeUser(String username) {
 
         log.info("Deleted User with username[{}]",username);
-        userDao.deleteById(username);
+        userDao.deleteByUsername(username);
     }
 
     @Override
     public void updateUser(User user,String username) {
-        UserEntity existing=userDao.findById(username).orElseThrow(()->new UnknownUserException(username));
+        UserEntity existing=userDao.findByUsername(username).orElseThrow(()->new UnknownUserException(username));
         existing.setUsername(user.getUsername());
         existing.setPassword(user.getPassword());
         log.info("Updated User");
