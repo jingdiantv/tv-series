@@ -13,6 +13,6 @@ public class TvSeriesDTO  {
     Integer id;
     String name;
     Integer numberOfEpisodes;
-    Double rating;
+    Double averageRating;
 
 }

@@ -31,13 +31,12 @@ public class DatabaseTvSeriesProvider implements TvSeriesProvider {
         }
         TvSeriesEntity tvSeriesEntity=optionalTvSeriesEntity.get();
 
-       Double averageRating= tvSeriesEntity.getUsersWatched().stream()
-                .mapToInt( WatchListEntity::getRating)
-                .average()
-               .orElse(0.0d);
+
 
        log.info("Returned Tv Series with id [{}]",id);
-        return Optional.ofNullable(TvSeriesEntityMapper.fromEntityWithRating(tvSeriesEntity,averageRating));
+
+
+        return Optional.ofNullable(TvSeriesEntityMapper.fromEntity(tvSeriesEntity));
 
 
     }
@@ -47,16 +46,10 @@ public class DatabaseTvSeriesProvider implements TvSeriesProvider {
         log.info("Returned list of all Tv Series");
 
         Pageable pageable= PageRequest.of(pageNumber,pageSize);
-        return tvSeriesDao.findByNameContainingIgnoreCase(searchKey,pageable).stream()
-                .map((entity)->{
-                            Double averageRating= entity.getUsersWatched().stream()
-                                    .mapToInt( WatchListEntity::getRating)
-                                    .average()
-                                    .orElse(0.0d);
-                            return TvSeriesEntityMapper.fromEntityWithRating(entity,averageRating);
-                        }
 
-                       )
+
+        return tvSeriesDao.findByNameContainingIgnoreCase(searchKey,pageable).stream()
+                .map(TvSeriesEntityMapper::fromEntity)
                 .collect(Collectors.toList());
 
     }

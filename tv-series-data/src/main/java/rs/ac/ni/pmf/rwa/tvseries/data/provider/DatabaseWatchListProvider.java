@@ -56,33 +56,12 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
     public List<TvSeries>  getTvSeriesByUsername(String username){
         UserEntity user= userDao.findByUsername(username).orElseThrow(()-> new UnknownUserException(username));
 
-        List<TvSeries> list = new ArrayList<TvSeries>() ;
-        user.getWatchedTvSeries()
-                .forEach(watchListEntity ->
-                        {
-                            list.add(TvSeries.builder()
-                                            .id(watchListEntity.getTvSeries().getId())
-                                            .name(watchListEntity.getTvSeries().getName())
-                                            .numberOfEpisodes(watchListEntity.getTvSeries().getNumberOfEpisodes())
-                                            .rating(Double.valueOf(watchListEntity.getRating()) )
-                                            .episodesWatched(watchListEntity.getEpisodesWatched())
-                                    .build());
-                        });
         log.info("Returned list of all Tv Series watched by user[{}] ",username);
-        return list;
+        return  user.getWatchedTvSeries().stream().map( TvSeriesEntityMapper::fromWatchListEntity).collect(Collectors.toList());
 
     }
 
-    @Override
-    public Double getAverageRating(Integer tvSeriesId) {
-      TvSeriesEntity tvSeries= tvSeriesDao.findById(tvSeriesId).orElseThrow(()-> new UnknownTvSeriesException(tvSeriesId));
-        log.info("Returned average rating of Tv Series with id[{}]  ",tvSeriesId);
-      return tvSeries.getUsersWatched().stream()
-              .mapToInt( WatchListEntity::getRating)
-              .average().orElse(0.0d);
 
-
-    }
 
     @Override
     public Optional<TvSeries> getTvSeriesOnWatchListById(String username, Integer tvSeriesId) {
@@ -93,13 +72,7 @@ public class DatabaseWatchListProvider  implements WatchListProvider {
         for(WatchListEntity entity: user.getWatchedTvSeries()){
             if (entity.getTvSeries().getId().equals(tvSeriesId)){
                 log.info("Returned Tv Series with id[{}] from users[{}] watch list  ",tvSeriesId,username);
-                return Optional.of(TvSeries.builder()
-                        .id(entity.getTvSeries().getId())
-                        .name(entity.getTvSeries().getName())
-                        .numberOfEpisodes(entity.getTvSeries().getNumberOfEpisodes())
-                        .rating(Double.valueOf(entity.getRating()) )
-                        .episodesWatched(entity.getEpisodesWatched())
-                        .build());
+                return Optional.of(TvSeriesEntityMapper.fromWatchListEntity(entity));
             }
         }
 

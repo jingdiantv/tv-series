@@ -3,8 +3,8 @@ package rs.ac.ni.pmf.rwa.tvseries.rest.mapper;
 import org.springframework.stereotype.Component;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
 import rs.ac.ni.pmf.rwa.tvseries.rest.dto.tvseries.TvSeriesDTO;
-import rs.ac.ni.pmf.rwa.tvseries.rest.dto.tvseries.TvSeriesSimpleDTO;
-import rs.ac.ni.pmf.rwa.tvseries.rest.dto.tvseries.TvSeriesWithEpisodesWatchedDTO;
+import rs.ac.ni.pmf.rwa.tvseries.rest.dto.tvseries.TvSeriesSaveDTO;
+import rs.ac.ni.pmf.rwa.tvseries.rest.dto.tvseries.TvSeriesWatchedDTO;
 
 @Component
 public class TvSeriesMapper {
@@ -14,7 +14,7 @@ public class TvSeriesMapper {
                 .id(tvSeries.getId())
                 .name(tvSeries.getName())
                 .numberOfEpisodes(tvSeries.getNumberOfEpisodes())
-                .rating(tvSeries.getRating())
+                .averageRating(tvSeries.getAverageRating())
                 .build();
     }
 
@@ -24,20 +24,20 @@ public class TvSeriesMapper {
                 .id(dto.getId())
                 .name(dto.getName())
                 .numberOfEpisodes(dto.getNumberOfEpisodes())
-                .rating(dto.getRating())
+                .averageRating(dto.getAverageRating())
                 .build();
     }
 
-    public TvSeriesSimpleDTO toDtoSimple(final TvSeries tvSeries)
+    public TvSeriesSaveDTO toDtoSave(final TvSeries tvSeries)
     {
-        return TvSeriesSimpleDTO.builder()
+        return TvSeriesSaveDTO.builder()
                 .id(tvSeries.getId())
                 .name(tvSeries.getName())
                 .numberOfEpisodes(tvSeries.getNumberOfEpisodes())
                 .build();
     }
 
-    public TvSeries fromDtoSimple(final TvSeriesSimpleDTO dto)
+    public TvSeries fromDtoSave(final TvSeriesSaveDTO dto)
     {
         return TvSeries.builder()
                 .id(dto.getId())
@@ -47,24 +47,24 @@ public class TvSeriesMapper {
     }
 
 
-    public TvSeriesWithEpisodesWatchedDTO toDtoWithEpisodesWatched(final TvSeries tvSeries)
+    public TvSeriesWatchedDTO toDtoWatched(final TvSeries tvSeries)
     {
-        return TvSeriesWithEpisodesWatchedDTO.builder()
+        return TvSeriesWatchedDTO.builder()
                 .id(tvSeries.getId())
                 .name(tvSeries.getName())
                 .numberOfEpisodes(tvSeries.getNumberOfEpisodes())
-                .rating(tvSeries.getRating())
+                .usersRating(tvSeries.getUsersRating())
                 .episodesWatched(tvSeries.getEpisodesWatched())
                 .build();
     }
 
-    public TvSeries fromDtoWithEpisodesWatched(final TvSeriesWithEpisodesWatchedDTO dto)
+    public TvSeries fromDtoWatched(final TvSeriesWatchedDTO dto)
     {
         return TvSeries.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .numberOfEpisodes(dto.getNumberOfEpisodes())
-                .rating(dto.getRating())
+                .usersRating(dto.getUsersRating())
                 .episodesWatched(dto.getEpisodesWatched())
                 .build();
     }

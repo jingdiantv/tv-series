@@ -6,10 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.ni.pmf.rwa.tvseries.core.service.WatchListService;
-import rs.ac.ni.pmf.rwa.tvseries.rest.dto.UserDTO;
-import rs.ac.ni.pmf.rwa.tvseries.rest.dto.tvseries.TvSeriesDTO;
 import rs.ac.ni.pmf.rwa.tvseries.rest.dto.WatchedTvSeriesDTO;
-import rs.ac.ni.pmf.rwa.tvseries.rest.dto.tvseries.TvSeriesWithEpisodesWatchedDTO;
+import rs.ac.ni.pmf.rwa.tvseries.rest.dto.tvseries.TvSeriesWatchedDTO;
 import rs.ac.ni.pmf.rwa.tvseries.rest.mapper.TvSeriesMapper;
 import rs.ac.ni.pmf.rwa.tvseries.rest.mapper.UserMapper;
 import rs.ac.ni.pmf.rwa.tvseries.rest.mapper.WatchedTvSeriesMapper;
@@ -42,23 +40,23 @@ public class WatchListRestController {
     @PreAuthorize("#username == authentication.name || authentication.authorities.contains('Admin')")
     @GetMapping("/{username}/watch-list")
     @ResponseStatus(HttpStatus.OK)
-    public List<TvSeriesWithEpisodesWatchedDTO> getWatchList(
+    public List<TvSeriesWatchedDTO> getWatchList(
             @PathVariable(name = "username")  String username
     )
     {
-        return watchListService.getTvSeriesByUsername(username).stream().map(tvSeriesMapper::toDtoWithEpisodesWatched ).collect(Collectors.toList());
+        return watchListService.getTvSeriesByUsername(username).stream().map(tvSeriesMapper::toDtoWatched ).collect(Collectors.toList());
     }
 
 
     @PreAuthorize("#username == authentication.name || authentication.authorities.contains('Admin')")
     @GetMapping("/{username}/watch-list/{tvSeriesId}")
     @ResponseStatus(HttpStatus.OK)
-    public TvSeriesWithEpisodesWatchedDTO getTvSeriesOnWatchList(
+    public TvSeriesWatchedDTO getTvSeriesOnWatchList(
             @PathVariable(name = "username")  String username,
              @PathVariable(name = "tvSeriesId")  Integer tvSeriesId
     )
     {
-        return tvSeriesMapper.toDtoWithEpisodesWatched(watchListService.getTvSeriesOnWatchListById(username,tvSeriesId)) ;
+        return tvSeriesMapper.toDtoWatched(watchListService.getTvSeriesOnWatchListById(username,tvSeriesId)) ;
     }
 
     @PreAuthorize("#username == authentication.name || authentication.authorities.contains('Admin')")

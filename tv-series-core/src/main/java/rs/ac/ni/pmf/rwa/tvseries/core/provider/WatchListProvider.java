@@ -12,7 +12,6 @@ public interface WatchListProvider {
 
      List<TvSeries> getTvSeriesByUsername(String username);
 
-     Double getAverageRating(Integer tvSeriesId);
 
     Optional<TvSeries> getTvSeriesOnWatchListById(String username, Integer tvSeriesId);
 
