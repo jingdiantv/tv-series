@@ -5,9 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.User;
 import rs.ac.ni.pmf.rwa.tvseries.core.provider.UserProvider;
 import rs.ac.ni.pmf.rwa.tvseries.exception.DuplicateUserException;
+import rs.ac.ni.pmf.rwa.tvseries.exception.UnknownAuthorityException;
 import rs.ac.ni.pmf.rwa.tvseries.exception.UnknownUserException;
+import rs.ac.ni.pmf.rwa.tvseries.shared.Roles;
 
+import javax.management.BadAttributeValueExpException;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -75,4 +79,16 @@ public class UserService {
     }
 
 
+    public void grantAuthority(String username, Roles authority) {
+//        if(!Objects.equals(authority, "ADMIN")){
+//            throw new UnknownAuthorityException(authority);
+//        }
+        if(userProvider.getUserByUsername(username).isEmpty()){
+            log.warn("Error granting authority to User: User with username[{}] dose not exists",username);
+            throw new UnknownUserException(username);
+        }
+
+        log.info("Granting  User authority of '{}'",authority);
+        userProvider.grantAuthority(username,authority);
+    }
 }

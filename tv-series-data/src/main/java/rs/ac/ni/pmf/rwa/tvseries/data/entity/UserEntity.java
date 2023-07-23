@@ -2,6 +2,7 @@ package rs.ac.ni.pmf.rwa.tvseries.data.entity;
 
 import lombok.*;
 import rs.ac.ni.pmf.rwa.tvseries.core.model.TvSeries;
+import rs.ac.ni.pmf.rwa.tvseries.shared.Roles;
 
 import javax.persistence.*;
 import java.util.List;
@@ -25,6 +26,8 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     List<WatchListEntity> watchedTvSeries;
+
+    String role;
 
 
 

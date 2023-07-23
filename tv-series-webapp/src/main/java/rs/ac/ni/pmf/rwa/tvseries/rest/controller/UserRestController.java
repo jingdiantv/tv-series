@@ -9,6 +9,7 @@ import rs.ac.ni.pmf.rwa.tvseries.core.model.User;
 import rs.ac.ni.pmf.rwa.tvseries.core.service.UserService;
 import rs.ac.ni.pmf.rwa.tvseries.rest.dto.UserDTO;
 import rs.ac.ni.pmf.rwa.tvseries.rest.mapper.UserMapper;
+import rs.ac.ni.pmf.rwa.tvseries.shared.Roles;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,6 +60,13 @@ public class UserRestController {
         userService.delete(username);
     }
 
+
+    @PutMapping("/users/grant-authority/{username}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void grantUserAuthority(@RequestBody Roles authority, @PathVariable(value = "username") String username)
+    {
+        userService.grantAuthority(username, authority);
+    }
 
 
 }

@@ -12,6 +12,7 @@ import rs.ac.ni.pmf.rwa.tvseries.data.entity.UserEntity;
 import rs.ac.ni.pmf.rwa.tvseries.data.mapper.TvSeriesEntityMapper;
 import rs.ac.ni.pmf.rwa.tvseries.data.mapper.UserEntityMapper;
 import rs.ac.ni.pmf.rwa.tvseries.exception.UnknownUserException;
+import rs.ac.ni.pmf.rwa.tvseries.shared.Roles;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,9 +49,10 @@ public class DatabaseUserProvider implements UserProvider {
 
     @Override
     public void saveUser(User user) {
-
+        UserEntity entity=UserEntityMapper.toEntity(user);
+        entity.setRole(Roles.USER.name());
         log.info("Saved User");
-        userDao.save(UserEntityMapper.toEntity(user));
+        userDao.save(entity);
     }
 
     @Override
@@ -67,5 +69,12 @@ public class DatabaseUserProvider implements UserProvider {
         existing.setPassword(user.getPassword());
         log.info("Updated User");
         userDao.save(existing);
+    }
+
+    @Override
+    public void grantAuthority(String username, Roles authority) {
+        UserEntity user=userDao.findByUsername(username).orElseThrow(()->new UnknownUserException(username));
+        user.setRole(authority.name());
+        userDao.save(user);
     }
 }

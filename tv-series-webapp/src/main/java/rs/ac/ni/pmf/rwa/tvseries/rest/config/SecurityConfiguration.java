@@ -23,6 +23,7 @@ import rs.ac.ni.pmf.rwa.tvseries.data.dao.UserDao;
 import rs.ac.ni.pmf.rwa.tvseries.data.entity.UserEntity;
 import rs.ac.ni.pmf.rwa.tvseries.rest.dto.ErrorCode;
 import rs.ac.ni.pmf.rwa.tvseries.rest.dto.ErrorDTO;
+import rs.ac.ni.pmf.rwa.tvseries.rest.security.DatabaseUserDetailsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +60,7 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.POST, "/users"  ).anonymous()
                         .antMatchers(HttpMethod.DELETE, "/users/**"  ).hasAnyAuthority(ADMIN,USER)
                         .antMatchers(HttpMethod.PUT, "/users/**"  ).hasAnyAuthority(ADMIN,USER)
+                        .antMatchers(HttpMethod.PUT, "/users/grant-authority/**" ).hasAnyAuthority(ADMIN)
 
                         .antMatchers(HttpMethod.GET, "/**/watch-list/**"  ).hasAnyAuthority(ADMIN,USER)
                         .antMatchers(HttpMethod.GET, "/**/watch-list"  ).hasAnyAuthority(ADMIN,USER)
@@ -105,68 +107,10 @@ public class SecurityConfiguration {
 
     @Bean
     public UserDetailsService getUserDetailsService(UserDao dao,PasswordEncoder passwordEncoder) {
-        List<UserEntity> entities=dao.findAll();
 
-        List<UserDetails> users=new ArrayList<>();
-        for (UserEntity entity: entities) {
-            UserDetails user = User
-                    .builder()
-                    .username(entity.getUsername())
-                    .password(passwordEncoder.encode(entity.getPassword()))
-                    .accountExpired(false)
-                    .accountLocked(false)
-                    .authorities(USER,GUEST)
-                    .build();
-            users.add(user);
-            System.out.println("Username: "+entity.getUsername()+" Password: "+entity.getPassword());
-        }
-
-        UserDetails user = User
-                .builder()
-                .username("admin")
-                .password(passwordEncoder.encode("admin") )
-                .accountExpired(false)
-                .accountLocked(false)
-                .authorities(ADMIN)
-                .build();
-        users.add(user);
-
-
-
-        return new InMemoryUserDetailsManager(users);
+        return new DatabaseUserDetailsService(dao,passwordEncoder);
     }
 
-//    @Bean
-//    public UserDetailsService getUserDetailsService(PasswordEncoder passwordEncoder)
-//    {
-//        UserDetails user =
-//                User.builder()
-//                        .username("user")
-//                        .password(passwordEncoder.encode("user"))
-//                        .disabled(false)
-//                        .accountExpired(false)
-//                        .accountLocked(false)
-//                        .authorities(USER, GUEST)
-//                        .build();
-//        System.out.println(user);
-//
-//        UserDetails guest =
-//                User.builder()
-//                        .username("guest")
-//                        .password(passwordEncoder.encode("guest"))
-//                        .authorities(GUEST)
-//                        .build();
-//
-//        UserDetails admin =
-//                User.builder()
-//                        .username("admin")
-//                        .password(passwordEncoder.encode("admin"))
-//                        .authorities(ADMIN)
-//                        .build();
-//
-//
-//        return new InMemoryUserDetailsManager(user, guest, admin);
-//    }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer()
